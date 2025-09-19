@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { TimeCalculatorComponent } from './Components/timeinput/timeinput.component';
+import { TimeInputComponent } from './Components/timeinput/timeinput.component';
 
 @Component({
   selector: 'app-root',
-  imports: [TimeCalculatorComponent],
+  imports: [TimeInputComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

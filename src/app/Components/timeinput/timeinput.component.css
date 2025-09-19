@@ -1,53 +1,56 @@
 .time-calculator {
+  font-family: Arial, sans-serif;
   max-width: 600px;
   margin: auto;
-  padding: 1rem;
-  border-radius: 12px;
-  background: #f9f9f9;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  padding: 20px;
 }
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 1rem;
-}
-
-th, td {
-  padding: 0.5rem;
+h2 {
   text-align: center;
-  border-bottom: 1px solid #ddd;
+  margin-bottom: 16px;
 }
-
-input[type="time"] {
-  padding: 0.3rem;
+.day-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #f9f9f9;
+  transition: background 0.3s ease;
 }
-
-.total {
-  font-size: 1.2rem;
-  margin-top: 1rem;
-}
-
-.positive {
-  color: green;
+.day-label {
+  width: 100px;
   font-weight: bold;
 }
-
-.negative {
-  color: red;
+.time-output {
+  margin-left: auto;
   font-weight: bold;
 }
-
+.highlight {
+  background: #d2f8d2 !important;
+  border-color: #4CAF50;
+}
+input {
+  padding: 4px;
+}
+.weekly-total {
+  margin-top: 16px;
+  font-size: 16px;
+  text-align: right;
+  font-weight: bold;
+}
 button {
-  padding: 0.5rem 1rem;
+  display: block;
+  margin: 20px auto 0;
+  padding: 8px 16px;
   border: none;
   background: #ff4d4d;
-  color: #fff;
-  font-weight: bold;
-  border-radius: 8px;
+  color: white;
+  border-radius: 6px;
   cursor: pointer;
+  font-size: 14px;
 }
-
 button:hover {
   background: #e60000;
 }

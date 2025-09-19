@@ -1,37 +1,21 @@
 <div class="time-calculator">
-  <h2>Weekly Time Calculator</h2>
-  
-  <table>
-    <thead>
-      <tr>
-        <th>Day</th>
-        <th>Check-In</th>
-        <th>Check-Out</th>
-        <th>Balance (mins)</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let day of days; let i = index">
-        <td>Day {{ i + 1 }}</td>
-        <td>
-          <input type="time" [(ngModel)]="day.checkIn" (change)="calculateAll()">
-        </td>
-        <td>
-          <input type="time" [(ngModel)]="day.checkOut" (change)="calculateAll()">
-        </td>
-        <td [ngClass]="{'positive': day.balance > 0, 'negative': day.balance < 0}">
-          {{ day.balance }}
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <h2>Time Calculator</h2>
 
-  <div class="total">
-    <strong>Total Weekly Balance:</strong> 
-    <span [ngClass]="{'positive': totalBalance > 0, 'negative': totalBalance < 0}">
-      {{ totalBalance }} minutes
-    </span>
+  <div *ngFor="let day of workWeek; let i = index" 
+       class="day-row"
+       [ngClass]="{ 'highlight': i === currentDayIndex }">
+
+    <span class="day-label">{{ day.dayName }}</span>
+
+    <input type="time" [(ngModel)]="day.checkIn" (change)="calculateAll()" />
+    <input type="time" [(ngModel)]="day.checkOut" (change)="calculateAll()" />
+
+    <span class="time-output">{{ day.totalMinutes }} mins</span>
   </div>
 
-  <button (click)="reset()">Reset</button>
+  <div class="weekly-total">
+    Weekly Total: <strong>{{ weeklyTotal }} mins</strong>
+  </div>
+
+  <button (click)="clearStorage()">Clear Storage</button>
 </div>

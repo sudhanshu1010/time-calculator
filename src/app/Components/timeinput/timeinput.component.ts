@@ -1,78 +1,84 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 interface WorkDay {
+  dayName: string;
   checkIn: string;
   checkOut: string;
-  balance: number;
+  totalMinutes: number;
 }
 
 @Component({
-  selector: 'app-time-calculator',
+  selector: 'app-timeinput',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './timeinput.component.html',
-  styleUrl: './timeinput.component.css'
+  styleUrls: ['./timeinput.component.css']
 })
+export class TimeInputComponent {
+  workWeek: WorkDay[] = [];
+  currentDayIndex = new Date().getDay() - 1; // Monday=0 … Friday=4
 
-export class TimeCalculatorComponent implements OnInit {
-  days: WorkDay[] = [];
-  totalBalance: number = 0;
-
-  ngOnInit(): void {
-    const stored = localStorage.getItem('workDays');
-    if (stored) {
-      this.days = JSON.parse(stored);
+  constructor() {
+    const savedData = localStorage.getItem('workWeek');
+    if (savedData) {
+      this.workWeek = JSON.parse(savedData);
       this.calculateAll();
     } else {
-      // initialize 5 days with empty values
-      this.days = Array.from({ length: 5 }, () => ({ checkIn: '', checkOut: '', balance: 0 }));
+      this.initWorkWeek();
+      this.calculateAll();
     }
   }
 
-  calculateDay(day: WorkDay): number {
+  private initWorkWeek() {
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    this.workWeek = days.map(d => ({
+      dayName: d,
+      checkIn: '11:15',
+      checkOut: '20:30',
+      totalMinutes: 0
+    }));
+  }
+
+  private calculateDayBalance(day: WorkDay): number {
     if (!day.checkIn || !day.checkOut) return 0;
 
-    const refIn = this.parseTime('11:15');
-    const refOut = this.parseTime('20:30');
+    const [inHour, inMin] = day.checkIn.split(':').map(Number);
+    const [outHour, outMin] = day.checkOut.split(':').map(Number);
 
-    const inTime = this.parseTime(day.checkIn);
-    const outTime = this.parseTime(day.checkOut);
+    if ([inHour, inMin, outHour, outMin].some(isNaN)) return 0;
 
-    let checkInPenalty = 0;
-    if (inTime > refIn) {
-      checkInPenalty = -(inTime - refIn) / 60000; // ms → minutes
+    const REF_IN = 11 * 60 + 15;   // 11:15 AM
+    const REF_OUT = 20 * 60 + 30;  // 8:30 PM
+
+    let penalty = 0;
+    if (inHour * 60 + inMin > REF_IN) {
+      penalty = -(inHour * 60 + inMin - REF_IN);
     }
 
-    let checkOutBonus = 0;
-    if (outTime > refOut) {
-      checkOutBonus = (outTime - refOut) / 60000;
+    let bonus = 0;
+    if (outHour * 60 + outMin > REF_OUT) {
+      bonus = (outHour * 60 + outMin - REF_OUT);
     }
 
-    return checkInPenalty + checkOutBonus;
+    return penalty + bonus;
   }
 
   calculateAll(): void {
-    this.totalBalance = 0;
-    this.days.forEach((day, index) => {
-      day.balance = this.calculateDay(day);
-      this.totalBalance += day.balance;
+    this.workWeek.forEach(day => {
+      day.totalMinutes = this.calculateDayBalance(day);
     });
-
-    localStorage.setItem('workDays', JSON.stringify(this.days));
+    localStorage.setItem('workWeek', JSON.stringify(this.workWeek));
   }
 
-  reset(): void {
-    this.days = Array.from({ length: 5 }, () => ({ checkIn: '', checkOut: '', balance: 0 }));
-    this.totalBalance = 0;
-    localStorage.removeItem('workDays');
+  clearStorage() {
+    localStorage.removeItem('workWeek');
+    this.initWorkWeek();
+    this.calculateAll();
   }
 
-  private parseTime(time: string): number {
-    const [hours, minutes] = time.split(':').map(Number);
-    const date = new Date();
-    date.setHours(hours, minutes, 0, 0);
-    return date.getTime();
+  get weeklyTotal(): number {
+    return this.workWeek.reduce((sum, d) => sum + d.totalMinutes, 0);
   }
 }
