@@ -1,6 +1,6 @@
 import {
   Title
-} from "./chunk-UGIBSTYO.js";
+} from "./chunk-QH2KFUIJ.js";
 import {
   DOCUMENT,
   HashLocationStrategy,
@@ -9,7 +9,7 @@ import {
   LocationStrategy,
   PathLocationStrategy,
   ViewportScroller
-} from "./chunk-CQMIC45J.js";
+} from "./chunk-N6CVYR2R.js";
 import {
   APP_BOOTSTRAP_LISTENER,
   ApplicationRef,
@@ -49,8 +49,6 @@ import {
   Subscription,
   Version,
   ViewContainerRef,
-  __spreadProps,
-  __spreadValues,
   afterNextRender,
   booleanAttribute,
   catchError,
@@ -110,7 +108,11 @@ import {
   ɵɵloadQuery,
   ɵɵqueryRefresh,
   ɵɵsanitizeUrlOrResourceUrl
-} from "./chunk-O3LGEELE.js";
+} from "./chunk-DDMIJ7J2.js";
+import {
+  __spreadProps,
+  __spreadValues
+} from "./chunk-S35DAJRX.js";
 
 // node_modules/@angular/router/fesm2022/router-Dwfin5Au.mjs
 var PRIMARY_OUTLET = "primary";

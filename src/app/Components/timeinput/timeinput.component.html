@@ -1,21 +1,23 @@
 <div class="time-calculator">
   <h2>Time Calculator</h2>
 
-  <div *ngFor="let day of workWeek; let i = index" 
+  <div *ngFor="let day of workWeek; let i = index"
        class="day-row"
        [ngClass]="{ 'highlight': i === currentDayIndex }">
 
-    <span class="day-label">{{ day.dayName }}</span>
+    <span class="day-label">{{ day.day }}</span>
 
-    <input type="time" [(ngModel)]="day.checkIn" (change)="calculateAll()" />
-    <input type="time" [(ngModel)]="day.checkOut" (change)="calculateAll()" />
+    <input type="time" [(ngModel)]="day.check_in" />
+    <input type="time" [(ngModel)]="day.check_out" />
 
-    <span class="time-output">{{ day.totalMinutes }} mins</span>
+    <span class="time-output">{{ day.total_minutes }} mins</span>
+
+    <!-- New Buttons -->
+    <button class="save-btn" (click)="saveEntry(day)">Save</button>
+    <button class="clear-btn" (click)="clearEntry(day)">Clear</button>
   </div>
 
   <div class="weekly-total">
     Weekly Total: <strong>{{ weeklyTotal }} mins</strong>
   </div>
-
-  <button (click)="clearStorage()">Clear Storage</button>
 </div>

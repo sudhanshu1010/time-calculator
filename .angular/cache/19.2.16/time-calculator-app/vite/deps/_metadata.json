@@ -1,49 +1,64 @@
 {
-  "hash": "d149b55c",
-  "configHash": "1a75b340",
-  "lockfileHash": "5484cf12",
-  "browserHash": "8f9452d7",
+  "hash": "0fb40397",
+  "configHash": "402b2078",
+  "lockfileHash": "54d677c0",
+  "browserHash": "932aa017",
   "optimized": {
     "@angular/common": {
       "src": "../../../../../../node_modules/@angular/common/fesm2022/common.mjs",
       "file": "@angular_common.js",
-      "fileHash": "3f03b61b",
+      "fileHash": "69d3ed5b",
       "needsInterop": false
     },
     "@angular/core": {
       "src": "../../../../../../node_modules/@angular/core/fesm2022/core.mjs",
       "file": "@angular_core.js",
-      "fileHash": "927d0ae0",
+      "fileHash": "ddb5a506",
       "needsInterop": false
     },
     "@angular/forms": {
       "src": "../../../../../../node_modules/@angular/forms/fesm2022/forms.mjs",
       "file": "@angular_forms.js",
-      "fileHash": "fbd2a2b0",
+      "fileHash": "6ca820ae",
       "needsInterop": false
     },
     "@angular/platform-browser": {
       "src": "../../../../../../node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
       "file": "@angular_platform-browser.js",
-      "fileHash": "ffe2512d",
+      "fileHash": "f6d7db8c",
       "needsInterop": false
     },
     "@angular/router": {
       "src": "../../../../../../node_modules/@angular/router/fesm2022/router.mjs",
       "file": "@angular_router.js",
-      "fileHash": "8cd9c0c1",
+      "fileHash": "ece58740",
+      "needsInterop": false
+    },
+    "@supabase/supabase-js": {
+      "src": "../../../../../../node_modules/@supabase/supabase-js/dist/module/index.js",
+      "file": "@supabase_supabase-js.js",
+      "fileHash": "c410b4b0",
       "needsInterop": false
     }
   },
   "chunks": {
-    "chunk-UGIBSTYO": {
-      "file": "chunk-UGIBSTYO.js"
+    "chunk-QH2KFUIJ": {
+      "file": "chunk-QH2KFUIJ.js"
     },
-    "chunk-CQMIC45J": {
-      "file": "chunk-CQMIC45J.js"
+    "chunk-N6CVYR2R": {
+      "file": "chunk-N6CVYR2R.js"
     },
-    "chunk-O3LGEELE": {
-      "file": "chunk-O3LGEELE.js"
+    "chunk-DDMIJ7J2": {
+      "file": "chunk-DDMIJ7J2.js"
+    },
+    "browser-U366SZMB": {
+      "file": "browser-U366SZMB.js"
+    },
+    "chunk-5JB4KNXG": {
+      "file": "chunk-5JB4KNXG.js"
+    },
+    "chunk-S35DAJRX": {
+      "file": "chunk-S35DAJRX.js"
     }
   }
 }
