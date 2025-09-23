@@ -10,7 +10,6 @@
     <input type="email" placeholder="Email" [(ngModel)]="email" name="email" required />
     <input type="password" placeholder="Password" [(ngModel)]="password" name="password" required />
 
-
     <button type="submit">{{ isLoginMode ? 'Login' : 'Sign Up' }}</button>
   </form>
 
@@ -18,5 +17,5 @@
     {{ isLoginMode ? "Don't have an account? Sign Up" : "Already have an account? Login" }}
   </p>
 
-  <p class="message">{{ message }}</p>
+  <p  *ngIf="message" class="message message-box" [class.error]="message.includes('Error')" class="message">{{ message }}</p>
 </div>

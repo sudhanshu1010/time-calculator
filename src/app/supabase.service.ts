@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { createClient, SupabaseClient, User } from '@supabase/supabase-js';
+import { LoadingService } from './services/loading.service';
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +8,7 @@ import { createClient, SupabaseClient, User } from '@supabase/supabase-js';
 export class SupabaseService {
   private supabase: SupabaseClient;
 
-  constructor() {
+  constructor(private loadingService: LoadingService) {
     this.supabase = createClient(
       'https://qdzklqbqqjrxcoqxkiky.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFkemtscWJxcWpyeGNvcXhraWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1MjU4NDMsImV4cCI6MjA3NDEwMTg0M30.C9ozRZSa06i8ie6AfVRSFoNucWbNTRsjh-_qZ4zHk6g'
@@ -16,25 +17,39 @@ export class SupabaseService {
 
   // Enhanced SignUp method that includes user metadata
   async signUpWithProfile(email: string, password: string, firstName: string, lastName: string) {
-    return await this.supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          first_name: firstName,
-          last_name: lastName
+    this.loadingService.show();
+    try {
+      return await this.supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            first_name: firstName,
+            last_name: lastName
+          }
         }
-      }
-    });
+      });
+    } finally {
+      this.loadingService.hide();
+    }
   }
 
   // Original simple signUp (keep for compatibility)
   async signUp(email: string, password: string) {
-    return this.supabase.auth.signUp({ email, password });
+    try {
+      return this.supabase.auth.signUp({ email, password });
+    } finally {
+      this.loadingService.hide();
+    }
   }
 
   async signIn(email: string, password: string) {
-    return this.supabase.auth.signInWithPassword({ email, password });
+    this.loadingService.show();
+    try {
+      return this.supabase.auth.signInWithPassword({ email, password });
+    } finally {
+      this.loadingService.hide();
+    }
   }
 
   async signOut() {
