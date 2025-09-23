@@ -1,13 +1,27 @@
 .time-calculator {
   font-family: Arial, sans-serif;
-  max-width: 600px;
+  max-width: 680px;
   margin: auto;
   padding: 20px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 }
+
 h2 {
   text-align: center;
   margin-bottom: 16px;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  flex-shrink: 0;
 }
+
+.day-rows-container {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
 .day-row {
   display: flex;
   align-items: center;
@@ -18,36 +32,57 @@ h2 {
   border-radius: 6px;
   background: #f9f9f9;
   transition: background 0.3s ease;
+  flex-shrink: 0;
 }
+
 .day-label {
   width: 100px;
   font-weight: bold;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
+  flex-shrink: 0;
 }
+
 .time-output {
   margin-left: auto;
   font-weight: bold;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
+  flex-shrink: 0;
+  min-width: 80px;
+  text-align: center;
 }
+
 .highlight {
   background: #d2f8d2 !important;
   border-color: #4CAF50;
 }
+
 input {
   padding: 4px;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
+  width: 120px;
+  flex-shrink: 0;
 }
+
 .weekly-total {
   margin-top: 16px;
-  font-size: 16px;
+  font-size: clamp(1rem, 3vw, 1.2rem);
   text-align: right;
   font-weight: bold;
+  flex-shrink: 0;
+  padding: 10px;
+  background: #f0f0f0;
+  border-radius: 6px;
 }
+
 button {
-  display: block;
   padding: 8px 16px;
   border: none;
   color: white;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+  flex-shrink: 0;
+  min-width: 70px;
 }
 
 .save-btn {
@@ -63,5 +98,163 @@ button {
 }
 
 .clear-btn:hover {
-  background-color:  #e60000;
+  background-color: #e60000;
+}
+
+.more {
+  color: green;
+}
+
+.less {
+  color: red;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .time-calculator {
+    padding: 15px;
+    max-width: 100%;
+  }
+  
+  .day-row {
+    gap: 8px;
+    padding: 6px;
+    margin-bottom: 6px;
+  }
+  
+  .day-label {
+    width: 80px;
+    font-size: 0.9rem;
+  }
+  
+  input {
+    width: 90px;
+    padding: 3px;
+  }
+  
+  button {
+    padding: 6px 12px;
+    min-width: 60px;
+  }
+  
+  .time-output {
+    min-width: 70px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .time-calculator {
+    padding: 10px;
+  }
+  
+  .day-row {
+    gap: 6px;
+    padding: 5px;
+    margin-bottom: 5px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .day-label {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 5px;
+    font-size: 0.85rem;
+  }
+  
+  .time-inputs {
+    display: flex;
+    gap: 6px;
+    flex: 1;
+    justify-content: center;
+  }
+  
+  input {
+    width: 80px;
+    font-size: 0.85rem;
+    padding: 2px;
+  }
+  
+  .time-output {
+    min-width: 60px;
+    font-size: 0.85rem;
+    margin-left: 0;
+    text-align: center;
+  }
+  
+  .button-group {
+    display: flex;
+    gap: 5px;
+    width: 100%;
+    justify-content: center;
+    margin-top: 5px;
+  }
+  
+  button {
+    padding: 5px 10px;
+    min-width: 55px;
+    font-size: 0.8rem;
+    flex: 1;
+    max-width: 80px;
+  }
+  
+  .weekly-total {
+    margin-top: 12px;
+    padding: 8px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .time-calculator {
+    padding: 8px;
+  }
+  
+  .day-row {
+    gap: 4px;
+    padding: 4px;
+  }
+  
+  input {
+    width: 70px;
+    font-size: 0.8rem;
+  }
+  
+  button {
+    padding: 4px 8px;
+    min-width: 50px;
+    font-size: 0.75rem;
+  }
+  
+  .time-output {
+    min-width: 50px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Prevent body scroll */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Ensure no vertical scrolling in the container */
+.day-rows-container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.day-rows-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.day-rows-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 2px;
+}
+
+.day-rows-container::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }

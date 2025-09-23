@@ -23,6 +23,6 @@
   </div>
 
   <div class="weekly-total">
-    Weekly Total: <strong>{{ weeklyTotal }} mins</strong>
+    Weekly Total: <strong [ngClass]="{'more': weeklyTotal > 0, 'less': weeklyTotal < 0}">{{ weeklyTotal }} mins</strong>
   </div>
 </div>
