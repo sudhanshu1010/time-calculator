@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
-
 interface WorkDay {
   id?: number;
   day: string;
@@ -23,10 +22,9 @@ interface WorkDay {
 
 export class TimeInputComponent implements OnInit {
   workWeek: WorkDay[] = [];
-  currentDayIndex = new Date().getDay() - 1; // Monday=0 … Friday=4
+  currentDayIndex = new Date().getDay() - 1;
 
-    constructor(private router: Router) {}
-  
+  constructor(private router: Router) {}
 
   private readonly DEFAULT_IN = '11:15';
   private readonly DEFAULT_OUT = '20:30';
@@ -63,7 +61,6 @@ export class TimeInputComponent implements OnInit {
         : { day: d, check_in: this.DEFAULT_IN, check_out: this.DEFAULT_OUT, total_minutes: 0 };
     });
   }
-
 
   /** Save or update entry */
   async saveEntry(day: WorkDay) {

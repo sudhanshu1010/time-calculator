@@ -1,9 +1,7 @@
 <div class="time-calculator">
   <h2>Time Calculator</h2>
 
-  <div *ngFor="let day of workWeek; let i = index"
-       class="day-row"
-       [ngClass]="{ 'highlight': i === currentDayIndex }">
+  <div *ngFor="let day of workWeek; let i = index" class="day-row" [ngClass]="{ 'highlight': i === currentDayIndex }">
 
     <span class="day-label">{{ day.day }}</span>
 
