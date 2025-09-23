@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { supabase } from '../../supabaseClient'; // supabase client
+import { supabase } from '../../supabaseClient';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -19,10 +19,11 @@ interface WorkDay {
   templateUrl: './timeinput.component.html',
   styleUrls: ['./timeinput.component.css'],
 })
-
 export class TimeInputComponent implements OnInit {
   workWeek: WorkDay[] = [];
   currentDayIndex = new Date().getDay() - 1;
+  userName: string = '';
+  loading = true;
 
   constructor(private router: Router) {}
 
@@ -30,7 +31,46 @@ export class TimeInputComponent implements OnInit {
   private readonly DEFAULT_OUT = '20:30';
 
   async ngOnInit() {
-    await this.loadEntries();
+    try {
+      await this.loadUserInfo();
+      await this.loadEntries();
+    } catch (error) {
+      console.error('Initialization error:', error);
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  private async loadUserInfo() {
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    
+    if (authError || !user) {
+      console.error('Auth error:', authError);
+      alert("Please login or signup first!");
+      this.router.navigate(['/']);
+      return;
+    }
+
+    // Use maybeSingle to handle cases where user might not exist in users table
+    const { data, error } = await supabase
+      .from('users')
+      .select('first_name, last_name')
+      .eq('id', user.id)
+      .maybeSingle();
+
+    if (error) {
+      console.error('Error fetching user info:', error);
+      // Don't return here, just set a default name
+      this.userName = 'User';
+      return;
+    }
+
+    if (data) {
+      this.userName = `${data.first_name}`;
+    } else {
+      console.warn('No user profile found, using default name');
+      this.userName = 'User';
+    }
   }
 
   /** Load entries from DB or defaults */
@@ -45,73 +85,110 @@ export class TimeInputComponent implements OnInit {
     const { data, error } = await supabase
       .from('time_entries')
       .select('*')
-      .eq('user_id', user.id);
+      .eq('user_id', 'd82c8b7c-421b-4594-8c8f-9b0299c48f5a')
+      .order('day'); // Add ordering for consistency
 
     if (error) {
-      console.error('Error fetching entries:', error.message);
-      return;
+      console.error('Error fetching entries:', error);
+      // Continue with default entries even if there's an error
     }
 
     const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
-    this.workWeek = days.map(d => {
-      const found = data?.find(entry => entry.day === d);
-      return found
-        ? { ...found }
-        : { day: d, check_in: this.DEFAULT_IN, check_out: this.DEFAULT_OUT, total_minutes: 0 };
+    this.workWeek = days.map(day => {
+      const found = data?.find(entry => entry.day === day);
+      
+      if (found) {
+        return { 
+          ...found,
+          check_in: found.check_in || this.DEFAULT_IN,
+          check_out: found.check_out || this.DEFAULT_OUT,
+          total_minutes: found.total_minutes || 0
+        };
+      }
+      
+      return { 
+        day, 
+        check_in: this.DEFAULT_IN, 
+        check_out: this.DEFAULT_OUT, 
+        total_minutes: 0 
+      };
     });
   }
 
   /** Save or update entry */
   async saveEntry(day: WorkDay) {
+    if (!day.check_in || !day.check_out) {
+      console.error('Invalid time values');
+      return;
+    }
+
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
+    if (!user) {
+      alert("Session expired. Please login again.");
+      this.router.navigate(['/']);
+      return;
+    }
 
-    // Calculate minutes difference
-    const [inH, inM] = day.check_in.split(':').map(Number);
-    const [outH, outM] = day.check_out.split(':').map(Number);
-    const checkInMinutes = inH * 60 + inM;
-    const checkOutMinutes = outH * 60 + outM;
-
-    const REF_IN = 11 * 60 + 15;   // 11:15 AM
-    const REF_OUT = 20 * 60 + 30;  // 8:30 PM
-
-    let penalty = checkInMinutes > REF_IN ? -(checkInMinutes - REF_IN) : 0;
-    let bonus = checkOutMinutes > REF_OUT ? (checkOutMinutes - REF_OUT) : 0;
-
-    day.total_minutes = penalty + bonus;
-
-    if (day.id) {
-      // Update existing entry
-      const { error } = await supabase
-        .from('time_entries')
-        .update({
-          check_in: day.check_in,
-          check_out: day.check_out,
-          total_minutes: day.total_minutes,
-        })
-        .eq('id', day.id);
-
-      if (error) console.error('Update failed:', error.message);
-    } else {
-      // Insert new entry
-      const { data, error } = await supabase
-        .from('time_entries')
-        .insert([{
-          user_id: user.id,
-          day: day.day,
-          check_in: day.check_in,
-          check_out: day.check_out,
-          total_minutes: day.total_minutes,
-        }])
-        .select()
-        .single();
-
-      if (!error && data) {
-        day.id = data.id; // assign id for future updates
-      } else if (error) {
-        console.error('Insert failed:', error.message);
+    try {
+      // Calculate minutes difference
+      const [inH, inM] = day.check_in.split(':').map(Number);
+      const [outH, outM] = day.check_out.split(':').map(Number);
+      
+      // Validate time values
+      if (isNaN(inH) || isNaN(inM) || isNaN(outH) || isNaN(outM)) {
+        console.error('Invalid time format');
+        return;
       }
+
+      const checkInMinutes = inH * 60 + inM;
+      const checkOutMinutes = outH * 60 + outM;
+
+      const REF_IN = 11 * 60 + 15;   // 11:15 AM
+      const REF_OUT = 20 * 60 + 30;  // 8:30 PM
+
+      let penalty = checkInMinutes > REF_IN ? -(checkInMinutes - REF_IN) : 0;
+      let bonus = checkOutMinutes > REF_OUT ? (checkOutMinutes - REF_OUT) : 0;
+
+      day.total_minutes = penalty + bonus;
+
+      if (day.id) {
+        // Update existing entry
+        const { error } = await supabase
+          .from('time_entries')
+          .update({
+            check_in: day.check_in,
+            check_out: day.check_out,
+            total_minutes: day.total_minutes,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', day.id);
+
+        if (error) throw error;
+        
+      } else {
+        // Insert new entry
+        const { data, error } = await supabase
+          .from('time_entries')
+          .insert([{
+            user_id: user.id,
+            day: day.day,
+            check_in: day.check_in,
+            check_out: day.check_out,
+            total_minutes: day.total_minutes,
+          }])
+          .select()
+          .single();
+
+        if (error) throw error;
+        
+        if (data) {
+          day.id = data.id;
+        }
+      }
+    } catch (error: any) {
+      console.error('Save failed:', error.message);
+      alert('Error saving entry: ' + error.message);
     }
   }
 
@@ -120,9 +197,23 @@ export class TimeInputComponent implements OnInit {
     return this.workWeek.reduce((sum, d) => sum + d.total_minutes, 0);
   }
 
-  clearEntry(day: WorkDay) {
+  /** Format minutes to hours and minutes */
+  formatMinutes(minutes: number): string {
+    const hours = Math.floor(Math.abs(minutes) / 60);
+    const mins = Math.abs(minutes) % 60;
+    const sign = minutes < 0 ? '-' : '';
+    return `${sign}${hours}h ${mins}m`;
+  }
+
+  async clearEntry(day: WorkDay) {
     day.check_in = this.DEFAULT_IN;
     day.check_out = this.DEFAULT_OUT;
-    this.saveEntry(day);
+    day.total_minutes = 0;
+    await this.saveEntry(day);
+  }
+
+  // Helper to check if current day
+  isCurrentDay(dayIndex: number): boolean {
+    return dayIndex === this.currentDayIndex;
   }
 }

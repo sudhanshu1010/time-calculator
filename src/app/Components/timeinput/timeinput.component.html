@@ -1,6 +1,10 @@
 <div class="time-calculator">
   <h2>Time Calculator</h2>
 
+  <div class="user-info">
+    <p>Welcome, <strong>{{ userName }}</strong></p>
+  </div>
+
   <div *ngFor="let day of workWeek; let i = index" class="day-row" [ngClass]="{ 'highlight': i === currentDayIndex }">
 
     <span class="day-label">{{ day.day }}</span>
@@ -10,7 +14,6 @@
 
     <span class="time-output">{{ day.total_minutes }} mins</span>
 
-    <!-- New Buttons -->
     <button class="save-btn" (click)="saveEntry(day)">Save</button>
     <button class="clear-btn" (click)="clearEntry(day)">Clear</button>
   </div>
