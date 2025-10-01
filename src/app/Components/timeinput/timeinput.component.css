@@ -279,3 +279,11 @@ body {
 .day-rows-container::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+.more {
+  color: green;
+}
+
+.less {
+  color: red;
+}

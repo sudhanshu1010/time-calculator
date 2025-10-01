@@ -29,7 +29,7 @@
   <div class="footer-actions">
     <button class="save-all-btn" (click)="saveAllEntries()">Save All</button>
     <div class="weekly-total">
-      Weekly Total: <strong>{{ weeklyTotal }} mins</strong>
+      Weekly Total: <strong [ngClass]="weeklyTotal >= 0 ? 'more' : 'less'">{{ weeklyTotal }} mins</strong>
     </div>
   </div>
 
