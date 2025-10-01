@@ -17,7 +17,6 @@ h2 {
 }
 
 .day-rows-container {
-  flex: 1;
   overflow-y: auto;
   min-height: 0;
 }
@@ -109,34 +108,55 @@ button {
   color: red;
 }
 
+.save-all-btn {
+  background-color: rgb(70, 131, 70);
+  padding: 10px 20px;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  min-width: 120px;
+}
+
+.save-all-btn:hover {
+  background-color: rgb(6, 117, 6);
+}
+
+.save-all-btn:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .time-calculator {
     padding: 15px;
     max-width: 100%;
   }
-  
+
   .day-row {
     gap: 8px;
     padding: 6px;
     margin-bottom: 6px;
   }
-  
+
   .day-label {
     width: 80px;
     font-size: 0.9rem;
   }
-  
+
   input {
     width: 90px;
     padding: 3px;
   }
-  
+
   button {
     padding: 6px 12px;
     min-width: 60px;
   }
-  
+
   .time-output {
     min-width: 70px;
     font-size: 0.9rem;
@@ -147,7 +167,7 @@ button {
   .time-calculator {
     padding: 10px;
   }
-  
+
   .day-row {
     gap: 6px;
     padding: 5px;
@@ -155,34 +175,34 @@ button {
     flex-wrap: wrap;
     justify-content: space-between;
   }
-  
+
   .day-label {
     width: 100%;
     text-align: center;
     margin-bottom: 5px;
     font-size: 0.85rem;
   }
-  
+
   .time-inputs {
     display: flex;
     gap: 6px;
     flex: 1;
     justify-content: center;
   }
-  
+
   input {
     width: 80px;
     font-size: 0.85rem;
     padding: 2px;
   }
-  
+
   .time-output {
     min-width: 60px;
     font-size: 0.85rem;
     margin-left: 0;
     text-align: center;
   }
-  
+
   .button-group {
     display: flex;
     gap: 5px;
@@ -190,7 +210,7 @@ button {
     justify-content: center;
     margin-top: 5px;
   }
-  
+
   button {
     padding: 5px 10px;
     min-width: 55px;
@@ -198,7 +218,7 @@ button {
     flex: 1;
     max-width: 80px;
   }
-  
+
   .weekly-total {
     margin-top: 12px;
     padding: 8px;
@@ -210,23 +230,23 @@ button {
   .time-calculator {
     padding: 8px;
   }
-  
+
   .day-row {
     gap: 4px;
     padding: 4px;
   }
-  
+
   input {
     width: 70px;
     font-size: 0.8rem;
   }
-  
+
   button {
     padding: 4px 8px;
     min-width: 50px;
     font-size: 0.75rem;
   }
-  
+
   .time-output {
     min-width: 50px;
     font-size: 0.8rem;
@@ -234,7 +254,8 @@ button {
 }
 
 /* Prevent body scroll */
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   height: 100%;

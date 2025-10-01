@@ -6,23 +6,34 @@
   </div>
 
   <div class="user-info">
-    <p>Welcome, <strong>{{ userName }}</strong></p>
+    <p>Hi, <strong>{{ userName }}</strong></p>
   </div>
 
   <div *ngFor="let day of workWeek; let i = index" class="day-row" [ngClass]="{ 'highlight': i === currentDayIndex }">
 
     <span class="day-label">{{ day.day }}</span>
 
-    <input type="time" [(ngModel)]="day.check_in" />
-    <input type="time" [(ngModel)]="day.check_out" />
+    <!-- <input type="time" [(ngModel)]="day.check_in" />
+    <input type="time" [(ngModel)]="day.check_out" /> -->
+    <div class="time-inputs">
+        <input type="time" [(ngModel)]="day.check_in" (change)="onTimeChange(day)" />
+        <input type="time" [(ngModel)]="day.check_out" (change)="onTimeChange(day)" />
+      </div>
 
     <span class="time-output">{{ day.total_minutes }} mins</span>
 
-    <button class="save-btn" (click)="saveEntry(day)">Save</button>
+    <!-- <button class="save-btn" (click)="saveEntry(day)">Save</button> -->
     <button class="clear-btn" (click)="clearEntry(day)">Clear</button>
   </div>
 
-  <div class="weekly-total">
-    Weekly Total: <strong [ngClass]="{'more': weeklyTotal > 0, 'less': weeklyTotal < 0}">{{ weeklyTotal }} mins</strong>
+  <div class="footer-actions">
+    <button class="save-all-btn" (click)="saveAllEntries()">Save All</button>
+    <div class="weekly-total">
+      Weekly Total: <strong>{{ weeklyTotal }} mins</strong>
+    </div>
   </div>
+
+  <!-- <div class="weekly-total">
+    Weekly Total: <strong [ngClass]="{'more': weeklyTotal > 0, 'less': weeklyTotal < 0}">{{ weeklyTotal }} mins</strong>
+  </div> -->
 </div>
